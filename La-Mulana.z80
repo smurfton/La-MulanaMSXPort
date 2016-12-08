@@ -1,0 +1,10 @@
+; COMPATABILITY CHECK: NEED MSX 2 or greater? Let's start with compatability, leave for MSX 2 when we must.
+;ld a (#2d)		; MSX type
+SetScreenMode2:
+  ld a,$40 
+  di
+  out (#99),a		; #99 is VDP port.
+  ld a,0
+  ei				; there must be no interrupt between these two.
+  out (#99),a		; should be on screen mode 2 now. Some stuff missing here; Should be setting pallete and such.
+  ret				
