@@ -1,10 +1,50 @@
-; COMPATABILITY CHECK: NEED MSX 2 or greater? Let's start with compatability, leave for MSX 2 when we must.
-;ld a (#2d)		; MSX type
+#include "keyboard.z80"
+Main:
+	; init stuff here
+MainLoop:
+	; this is the main loop.
+	MainKeyboard:							; Keyboard here.
+		ld		b,$8		; arrow keys group
+		call	pollNEWKEY
+		ld		hl,Lemeza	; prepare x pos for changes.
+		bit		7,a			; right arrow
+		jp		nz,rightArrowSkip
+		inc		(hl)
+		rightArrowSkip:
+		bit		5,a
+		jp		nz,leftArrowSkip
+		dec		(hl)
+		leftArrowSkip:
+		
+		inc		hl			; prepare y pos for changes
+		
+		bit		6,a
+		jp		nz,upArrowSkip
+		inc		(hl)
+	upArrowSkip:
+		bit		4,a
+		jp		nz,downArrowSkip
+		dec		(hl)
+	downArrowSkip:
+		
+	jp	MainLoop
+		
+	nop
+	nop
+	nop
+	
 SetScreenMode2:
-  ld a,$40 
-  di
-  out (#99),a		; #99 is VDP port.
-  ld a,0
-  ei				; there must be no interrupt between these two.
-  out (#99),a		; should be on screen mode 2 now. Some stuff missing here; Should be setting pallete and such.
-  ret				
+	ld a,$40	; Screen mode 2
+	di
+	out ($99),a ; VDP port
+	xor a		; fast ld a,0
+	ei
+	out ($99),a
+	ret
+	nop
+;SetScreenMode0:
+	
+Lemeza:
+	$80		; x pos
+	$80		; y pos
+	

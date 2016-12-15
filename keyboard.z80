@@ -1,0 +1,15 @@
+pollKeyboard:		; Loads keys from B into A
+	in	a,($AA)
+    and	$F0
+    or	b
+    out	($AA),a
+    in	a,($A9)
+    ret
+	; group Y8/NEWKEY FBED: arrowR arrowD arrowU arrowL DEL INS HOME SPACE
+    ; group Y4/NEWKEY FBE9: R Q P O N M L K
+    
+pollNEWKEY:		; Loads keys from group B into A
+	ld iy,$FBE5	; base newkey
+    ld a,(iy+b)
+    ret
+	
